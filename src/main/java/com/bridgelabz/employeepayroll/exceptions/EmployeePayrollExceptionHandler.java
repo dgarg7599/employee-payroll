@@ -44,7 +44,7 @@ public class EmployeePayrollExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO> handleException(Exception exception){
         log.error("Exception: ", exception);
-        ResponseDTO responseDTO = new ResponseDTO("Server error: ", exception.getMessage());
+        ResponseDTO responseDTO = new ResponseDTO("Server error", exception.getMessage());
         return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

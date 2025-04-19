@@ -28,7 +28,7 @@ public class EmployeeController {
         Employee employee = employeeService.createEmployee(employeeDTO);
         ResponseDTO responseDTO = new ResponseDTO("Employee created successfully", employee);
         log.info("Employee Created Successfully with ID: {}", employee.getEmployeeId());
-        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     // Get all Employees

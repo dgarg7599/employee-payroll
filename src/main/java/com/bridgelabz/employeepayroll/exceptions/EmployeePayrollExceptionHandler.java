@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class EmployeePayrollExceptionHandler {
 
-    private static final String message = "Exception while processing REST request";
+    private static final String message = "Exception while processing request";
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){

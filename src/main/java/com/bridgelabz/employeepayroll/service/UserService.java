@@ -1,10 +1,6 @@
 package com.bridgelabz.employeepayroll.service;
 
-import com.bridgelabz.employeepayroll.dto.LoginDTO;
-import com.bridgelabz.employeepayroll.dto.RegisterDTO;
-import com.bridgelabz.employeepayroll.dto.ResponseDTO;
-import com.bridgelabz.employeepayroll.dto.LoginResponseDTO;
-import com.bridgelabz.employeepayroll.dto.RegisterResponseDTO;
+import com.bridgelabz.employeepayroll.dto.*;
 import com.bridgelabz.employeepayroll.exceptions.EmployeePayrollException;
 import com.bridgelabz.employeepayroll.model.User;
 import com.bridgelabz.employeepayroll.repository.UserRepository;
@@ -29,6 +25,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private OtpService otpService;
 
     @Override
     public ResponseDTO registerUser(RegisterDTO registerDTO) {
@@ -81,5 +80,42 @@ public class UserService implements IUserService {
 
         LoginResponseDTO loginResponse = new LoginResponseDTO(user.getFullName(), user.getEmail(), token);
         return new ResponseDTO("Login Successful", loginResponse);
+    }
+
+    @Override
+    public ResponseDTO forgotPassword(ForgotPasswordRequestDTO request) {
+        String email = request.getEmail();
+
+        log.info("EMail: " + email);
+
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new EmployeePayrollException("User not found with this email: " + email));
+
+        String otp = otpService.generateOtp(email);
+        emailService.sendOtpEmail(email, otp);
+
+        return new ResponseDTO("OTP sent to your email. It will expire in 5 minutes.", request.getEmail());
+    }
+
+    @Override
+    public ResponseDTO resetPassword(ResetPasswordRequestDTO request) {
+
+        log.info("Reset Password for email: {}", request.getEmail());
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new EmployeePayrollException("User not found with email: " + request.getEmail()));
+
+        boolean isValidOtp = otpService.validateOtp(user.getEmail(),  request.getOtp());
+
+        if(!isValidOtp) {
+            log.warn("Invalid or expired OTP for email: {}", request.getEmail());
+            throw new EmployeePayrollException("Invalid or Expired OTP");
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        log.info("Password reset successful for email: {}", user.getEmail());
+        return new ResponseDTO("Password reset successfully", user.getEmail());
     }
 }

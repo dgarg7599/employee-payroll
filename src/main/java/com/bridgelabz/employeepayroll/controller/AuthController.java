@@ -1,8 +1,7 @@
 package com.bridgelabz.employeepayroll.controller;
 
-import com.bridgelabz.employeepayroll.dto.LoginDTO;
-import com.bridgelabz.employeepayroll.dto.RegisterDTO;
-import com.bridgelabz.employeepayroll.dto.ResponseDTO;
+import com.bridgelabz.employeepayroll.dto.*;
+import com.bridgelabz.employeepayroll.model.User;
 import com.bridgelabz.employeepayroll.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +35,20 @@ public class AuthController {
         System.out.println("Login API hit");
         log.info("Login User: {}", loginDTO.getEmail());
         ResponseDTO responseDTO = userService.loginUser(loginDTO);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<ResponseDTO> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO request){
+        log.info("Forgot Password request for email: {}", request.getEmail());
+        ResponseDTO responseDTO = userService.forgotPassword(request);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<ResponseDTO> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO request){
+        log.info("Reset Password request for email: {}", request.getEmail());
+        ResponseDTO responseDTO = userService.resetPassword(request);
         return ResponseEntity.ok(responseDTO);
     }
 }

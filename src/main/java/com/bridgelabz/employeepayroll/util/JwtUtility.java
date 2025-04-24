@@ -18,8 +18,12 @@ public class JwtUtility {
     @Autowired
     private UserRepository userRepository;
 
-//    private static final String SECRET_KEY = "divyansh7599abcd6769";
-    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//    private static final String SECRET_KEY = "divyansh7599abcd6769xyz1234567890987654321";
+//    private static final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    private static final String SECRET_KEY = "divyansh7599abcd6769xyz1234567890987654321";
+    private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
 
     public String generateToken(String email){
         return Jwts.builder()

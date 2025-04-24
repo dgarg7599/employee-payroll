@@ -30,16 +30,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()  // Allow auth APIs like /auth/register, /auth/login
-                        .requestMatchers(HttpMethod.GET, "/employees/all").authenticated()
-                        .requestMatchers("/employees/**").authenticated()  // Protect all employee APIs
-                        .anyRequest().permitAll()
+                        .requestMatchers("/auth/**").permitAll() // Allow all /auth routes: register, login, forgot, reset
+                        .requestMatchers("/employees/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
 }

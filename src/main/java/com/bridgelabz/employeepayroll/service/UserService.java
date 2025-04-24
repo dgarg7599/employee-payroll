@@ -3,7 +3,8 @@ package com.bridgelabz.employeepayroll.service;
 import com.bridgelabz.employeepayroll.dto.LoginDTO;
 import com.bridgelabz.employeepayroll.dto.RegisterDTO;
 import com.bridgelabz.employeepayroll.dto.ResponseDTO;
-import com.bridgelabz.employeepayroll.dto.UserResponseDTO;
+import com.bridgelabz.employeepayroll.dto.LoginResponseDTO;
+import com.bridgelabz.employeepayroll.dto.RegisterResponseDTO;
 import com.bridgelabz.employeepayroll.exceptions.EmployeePayrollException;
 import com.bridgelabz.employeepayroll.model.User;
 import com.bridgelabz.employeepayroll.repository.UserRepository;
@@ -52,9 +53,9 @@ public class UserService implements IUserService {
         log.info("User saved successfully with email: {}", user.getEmail());
 
         emailService.sendEmail(user.getEmail(), "Registered in Employee Payroll App", "Thank You! You are successfully registered in Employee Payroll App!");
-        UserResponseDTO userResponse = new UserResponseDTO(user.getFullName(), user.getEmail(), user.getToken());
-        log.info("Registration successful for user: {}", userResponse.getEmail());
-        return new ResponseDTO("User Registered Successfully", userResponse);
+        RegisterResponseDTO registerResponse = new RegisterResponseDTO(user.getFullName(), user.getEmail());
+        log.info("Registration successful for user: {}", registerResponse.getEmail());
+        return new ResponseDTO("User Registered Successfully", registerResponse);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class UserService implements IUserService {
         emailService.sendEmail(user.getEmail(), "Login Successful", "Hi " + user.getFullName() + ",\n\n" + "You have successfully logged in to Employee Payroll App. \n\n" + "Your JWT Token is:\n\n" + token + "\n\n");
         log.info("Login successful and token saved for user: {}", user.getEmail());
 
-        UserResponseDTO userResponse = new UserResponseDTO(user.getFullName(), user.getEmail(), token);
-        return new ResponseDTO("Login Successful", userResponse);
+        LoginResponseDTO loginResponse = new LoginResponseDTO(user.getFullName(), user.getEmail(), token);
+        return new ResponseDTO("Login Successful", loginResponse);
     }
 }

@@ -6,7 +6,7 @@ public interface IUserService {
 
     ResponseDTO registerUser(RegisterDTO registerDTO);
     ResponseDTO loginUser(LoginDTO loginDTO);
-    ResponseDTO forgotPassword(ForgotPasswordRequestDTO request);
+    ResponseDTO forgotPassword(RegisterDTO request);
     ResponseDTO resetPassword(ResetPasswordRequestDTO request);
 
 }

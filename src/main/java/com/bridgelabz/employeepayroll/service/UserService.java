@@ -83,7 +83,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseDTO forgotPassword(ForgotPasswordRequestDTO request) {
+    public ResponseDTO forgotPassword(RegisterDTO request) {
         String email = request.getEmail();
 
         log.info("EMail: " + email);

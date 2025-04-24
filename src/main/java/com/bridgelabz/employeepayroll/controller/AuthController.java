@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot")
-    public ResponseEntity<ResponseDTO> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO request){
+    public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody RegisterDTO request){
         log.info("Forgot Password request for email: {}", request.getEmail());
         ResponseDTO responseDTO = userService.forgotPassword(request);
         return ResponseEntity.ok(responseDTO);

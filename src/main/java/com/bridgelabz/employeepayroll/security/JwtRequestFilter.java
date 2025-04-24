@@ -29,7 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         final String requestPath = request.getRequestURI();
-        // Skip JWT check for login and register endpoints
+        // Skip JWT check for auth endpoints
         if (requestPath.contains("/auth")) {
             chain.doFilter(request, response);
             return;

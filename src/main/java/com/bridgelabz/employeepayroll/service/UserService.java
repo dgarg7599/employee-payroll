@@ -33,13 +33,13 @@ public class UserService implements IUserService {
     public ResponseDTO registerUser(RegisterDTO registerDTO) {
         log.info("Registering user with email: {}", registerDTO.getEmail());
 
-        // check if email already registered or not
+        // Check if email already registered or not
         if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
             log.warn("Registration failed: Email already registered - {}", registerDTO.getEmail());
             throw new EmployeePayrollException("Email already registered");
         }
 
-        // encode password
+        // Encode password
         String encodedPassword = bCryptPasswordEncoder.encode(registerDTO.getPassword());
         log.debug("Encoded password generated");
 
@@ -77,6 +77,7 @@ public class UserService implements IUserService {
 
         user.setToken(token);
         userRepository.save(user);
+        emailService.sendEmail(user.getEmail(), "Login Successful", "Hi " + user.getFullName() + ",\n\n" + "You have successfully logged in to Employee Payroll App. \n\n" + "Your JWT Token is:\n\n" + token + "\n\n");
         log.info("Login successful and token saved for user: {}", user.getEmail());
 
         UserResponseDTO userResponse = new UserResponseDTO(user.getFullName(), user.getEmail(), token);

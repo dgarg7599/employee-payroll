@@ -76,8 +76,6 @@ public class UserService implements IUserService {
         String token = jwtUtility.generateToken(user.getEmail());
         log.debug("JWT token generated for user: {}", user.getEmail());
 
-        user.setToken(token);
-        userRepository.save(user);
         emailService.sendEmail(user.getEmail(), "Login Successful", "Hi " + user.getFullName() + ",\n\n" + "You have successfully logged in to Employee Payroll App. \n\n" + "Your JWT Token is:\n\n" + token + "\n\n");
         log.info("Login successful and token saved for user: {}", user.getEmail());
 

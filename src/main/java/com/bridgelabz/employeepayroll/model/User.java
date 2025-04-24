@@ -31,8 +31,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String token;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

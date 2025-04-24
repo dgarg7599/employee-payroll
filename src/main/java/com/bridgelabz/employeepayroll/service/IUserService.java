@@ -8,5 +8,5 @@ public interface IUserService {
     ResponseDTO loginUser(LoginDTO loginDTO);
     ResponseDTO forgotPassword(RegisterDTO request);
     ResponseDTO resetPassword(ResetPasswordRequestDTO request);
-
+    ResponseDTO changePassword(ChangePasswordDTO request, String token);
 }

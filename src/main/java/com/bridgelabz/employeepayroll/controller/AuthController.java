@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -49,6 +46,14 @@ public class AuthController {
     public ResponseEntity<ResponseDTO> resetPassword(@Valid @RequestBody ResetPasswordRequestDTO request){
         log.info("Reset Password request for email: {}", request.getEmail());
         ResponseDTO responseDTO = userService.resetPassword(request);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<ResponseDTO> changePassword(@Valid @RequestBody ChangePasswordDTO request, @RequestHeader("Authorization") String token){
+        log.info("Changing Password...");
+        String jwtToken = token.substring(7);
+        ResponseDTO responseDTO = userService.changePassword(request,jwtToken);
         return ResponseEntity.ok(responseDTO);
     }
 }

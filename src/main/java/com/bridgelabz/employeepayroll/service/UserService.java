@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Service
 public class UserService implements IUserService {
@@ -117,5 +121,29 @@ public class UserService implements IUserService {
 
         log.info("Password reset successful for email: {}", user.getEmail());
         return new ResponseDTO("Password reset successfully", user.getEmail());
+    }
+
+    @Override
+    public ResponseDTO changePassword(ChangePasswordDTO request, String token) {
+        log.info("Changing Password...");
+        String email = jwtUtility.extractEmail(token);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EmployeePayrollException("User not found"));
+
+        if (!bCryptPasswordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            log.warn("Old password is incorrect");
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("email", email);
+        data.put("message", "Password updated successfully");
+        data.put("timestamp", LocalDateTime.now());
+
+        log.info("Password changed successfully for email: {}", user.getEmail());
+        return new ResponseDTO("Password changed successfully", data);
     }
 }

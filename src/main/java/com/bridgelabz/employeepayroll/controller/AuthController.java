@@ -1,7 +1,6 @@
 package com.bridgelabz.employeepayroll.controller;
 
 import com.bridgelabz.employeepayroll.dto.*;
-import com.bridgelabz.employeepayroll.model.User;
 import com.bridgelabz.employeepayroll.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
